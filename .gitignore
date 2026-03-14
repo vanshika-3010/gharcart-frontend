@@ -1,0 +1,6 @@
+dist
+dist-ssr
+.env
+*.local
+.vscode
+.DS_Store
