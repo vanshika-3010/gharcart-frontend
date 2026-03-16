@@ -9,31 +9,29 @@ import Cart from './page/Cart';
 import Login from './components/Login';
 import Signup from './components/Signup';
 import Logout from './components/Logout';
-import CheckoutPage from './components/Checkout'
-import MyOrders from './components/OrderPage'
+import CheckoutPage from './components/Checkout';
+import MyOrders from './components/OrderPage';
 import VerifyPaymentPage from './page/VerifyPaymentPage';
 
-
-// ScrollToTop component: listens to route changes and scrolls window to top
+// Scroll to top on route change
 const ScrollToTop = () => {
   const { pathname } = useLocation();
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [pathname]);
+  useEffect(() => window.scrollTo(0, 0), [pathname]);
   return null;
 };
 
+// Protected Route wrapper
+const ProtectedRoute = ({ isAuthenticated, children }) =>
+  isAuthenticated ? children : <Navigate replace to="/login" />;
+
 const App = () => {
-  // Track auth state here
   const [isAuthenticated, setIsAuthenticated] = useState(
     Boolean(localStorage.getItem('authToken'))
   );
 
-  // Whenever we dispatch the custom event, update this flag
+  // Listen for custom auth change events
   useEffect(() => {
-    const handler = () => {
-      setIsAuthenticated(Boolean(localStorage.getItem('authToken')));
-    };
+    const handler = () => setIsAuthenticated(Boolean(localStorage.getItem('authToken')));
     window.addEventListener('authStateChanged', handler);
     return () => window.removeEventListener('authStateChanged', handler);
   }, []);
@@ -44,32 +42,21 @@ const App = () => {
       <Navbar isAuthenticated={isAuthenticated} />
 
       <Routes>
-        {/* Public pages */}
+        {/* Public */}
         <Route path="/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/items" element={<Items />} />
-
-        {/* Protected Cart: only /cart checks auth */}
-        <Route
-          path="/cart"
-          element={
-            isAuthenticated ? <Cart /> : <Navigate replace to="/login" />
-          }
-        />
-        <Route path="/checkout" element={<CheckoutPage />} />
-
-        {/* Payment verification */}
-        <Route path="/myorders/verify" element={<VerifyPaymentPage />} />
-        <Route path="/myorders" element={<MyOrders />} />
-
-        {/* Auth routes (always available) */}
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-
-        {/* Logout page (if you still want a dedicated route) */}
         <Route path="/logout" element={<Logout />} />
 
-        {/* Fallback: redirect to home */}
+        {/* Protected */}
+        <Route path="/cart" element={<ProtectedRoute isAuthenticated={isAuthenticated}><Cart /></ProtectedRoute>} />
+        <Route path="/checkout" element={<ProtectedRoute isAuthenticated={isAuthenticated}><CheckoutPage /></ProtectedRoute>} />
+        <Route path="/myorders" element={<ProtectedRoute isAuthenticated={isAuthenticated}><MyOrders /></ProtectedRoute>} />
+        <Route path="/myorders/verify" element={<ProtectedRoute isAuthenticated={isAuthenticated}><VerifyPaymentPage /></ProtectedRoute>} />
+
+        {/* Fallback */}
         <Route path="*" element={<Navigate replace to="/" />} />
       </Routes>
     </CartProvider>

@@ -27,7 +27,7 @@ const VerifyPaymentPage = () => {
         }
 
         axios
-            .get('http://localhost:4000/api/orders/confirm', {
+            axios.get(`${import.meta.env.VITE_API_URL}/api/orders/confirm`, {
                 params: { session_id },
                 headers: token
                     ? { Authorization: `Bearer ${token}` }

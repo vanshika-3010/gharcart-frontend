@@ -69,7 +69,7 @@ const CheckoutPage = () => {
     try {
       const token = localStorage.getItem('authToken');
       const res = await axios.post(
-        'http://localhost:4000/api/orders',
+        `${import.meta.env.VITE_API_URL}/api/orders`,
         order,
         {
           headers: {

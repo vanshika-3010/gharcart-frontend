@@ -4,19 +4,17 @@ import axios from 'axios';
 
 const CartContext = createContext();
 
+// Helper to get JWT token from storage
 const getAuthHeader = () => {
-  // Pull your JWT from wherever you’ve stored it
   const token =
     localStorage.getItem('authToken') ||
     localStorage.getItem('token') ||
     sessionStorage.getItem('token');
 
-  // Always send it explicitly, even if withCredentials is true
-  return token
-    ? { headers: { Authorization: `Bearer ${token}` } }
-    : {};
+  return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
 };
 
+// Normalize raw cart items
 const normalizeItems = (rawItems = []) => {
   return rawItems
     .map(item => {
@@ -28,8 +26,8 @@ const normalizeItems = (rawItems = []) => {
 
       return {
         ...item,
-        id, // unique line item ID
-        productId, // underlying product ID (used for addToCart)
+        id,
+        productId,
         name,
         price,
         imageUrl,
@@ -43,25 +41,23 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
   const [loading, setLoading] = useState(true);
 
+  const BASE_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
     fetchCart();
   }, []);
 
   const fetchCart = async () => {
     try {
-      const { data } = await axios.get(
-        'http://localhost:4000/api/cart',
-        {
-          ...getAuthHeader(),
-          withCredentials: true,   // if you’re relying on cookies too
-        }
-      );
+      const { data } = await axios.get(`${BASE_URL}/api/cart`, {
+        ...getAuthHeader(),
+        withCredentials: true,
+      });
       const rawItems = Array.isArray(data)
         ? data
         : Array.isArray(data.items)
           ? data.items
           : data.cart?.items || [];
-
       setCart(normalizeItems(rawItems));
     } catch (err) {
       console.error('Error fetching cart:', err);
@@ -72,7 +68,7 @@ export const CartProvider = ({ children }) => {
 
   const refreshCart = async () => {
     try {
-      const { data } = await axios.get('http://localhost:4000/api/cart', getAuthHeader());
+      const { data } = await axios.get(`${BASE_URL}/api/cart`, getAuthHeader());
       const rawItems = Array.isArray(data)
         ? data
         : Array.isArray(data.items)
@@ -85,29 +81,29 @@ export const CartProvider = ({ children }) => {
   };
 
   const addToCart = async (productId, quantity = 1) => {
-  const token = localStorage.getItem('authToken');
-  if (!token) {
-    alert('Please login first to add items to cart.');
-    return;
-  }
+    const token = localStorage.getItem('authToken');
+    if (!token) {
+      alert('Please login first to add items to cart.');
+      return;
+    }
 
-  try {
-    await axios.post(
-      'http://localhost:4000/api/cart',
-      { productId, quantity },
-      getAuthHeader()
-    );
-    await refreshCart();
-  } catch (err) {
-    console.error('Error adding to cart:', err);
-    alert('Failed to add item to cart.');
-  }
-};
+    try {
+      await axios.post(
+        `${BASE_URL}/api/cart`,
+        { productId, quantity },
+        getAuthHeader()
+      );
+      await refreshCart();
+    } catch (err) {
+      console.error('Error adding to cart:', err);
+      alert('Failed to add item to cart.');
+    }
+  };
 
   const updateQuantity = async (lineId, quantity) => {
     try {
       await axios.put(
-        `http://localhost:4000/api/cart/${lineId}`,
+        `${BASE_URL}/api/cart/${lineId}`,
         { quantity },
         getAuthHeader()
       );
@@ -119,7 +115,7 @@ export const CartProvider = ({ children }) => {
 
   const removeFromCart = async (lineId) => {
     try {
-      await axios.delete(`http://localhost:4000/api/cart/${lineId}`, getAuthHeader());
+      await axios.delete(`${BASE_URL}/api/cart/${lineId}`, getAuthHeader());
       await refreshCart();
     } catch (err) {
       console.error('Error removing from cart:', err);
@@ -128,14 +124,16 @@ export const CartProvider = ({ children }) => {
 
   const clearCart = async () => {
     try {
-      await axios.post('http://localhost:4000/api/cart/clear', {}, getAuthHeader());
+      await axios.post(`${BASE_URL}/api/cart/clear`, {}, getAuthHeader());
       setCart([]);
     } catch (err) {
       console.error('Error clearing cart:', err);
     }
   };
 
-  const getCartTotal = () => cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const getCartTotal = () =>
+    cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
 
   return (

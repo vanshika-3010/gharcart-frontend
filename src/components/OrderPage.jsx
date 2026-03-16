@@ -20,7 +20,7 @@ const UserOrdersPage = () => {
   const fetchAndFilterOrders = async () => {
     try {
       // 2) Fetch ALL orders publicly
-      const resp = await axios.get('http://localhost:4000/api/orders');
+      const resp = await axios.get(`${import.meta.env.VITE_API_URL}/api/orders`);
       const allOrders = resp.data;
 
       // 3) Client‑side filter by customer.email
