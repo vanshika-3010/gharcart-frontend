@@ -4,7 +4,8 @@ GharCart is a full-stack e-commerce web application built using the MERN Stack (
 
 ## 🌐 Live Demo
 🔗 Frontend (Vercel): https://gharcart-frontend.vercel.app/
-🔗 Backend (Railway): gharcart-backend-production.up.railway.app
+
+🔗 Backend (Railway): https://gharcart-backend-production.up.railway.app/
 
 ## 🚀 Features
 👤 User Features
