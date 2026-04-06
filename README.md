@@ -1,18 +1,73 @@
-<<<<<<< HEAD
-# gharcart-frontend
+# 🛒 GharCart – MERN Stack E-Commerce Application
 
-A modern React-based grocery e-commerce interface that allows users to browse products, search items, add items to cart, and place orders with a clean and responsive UI. Built using React, Tailwind CSS, and integrated with a Node.js backend API.
-=======
-# React + Vite
+GharCart is a full-stack e-commerce web application built using the MERN Stack (MongoDB, Express.js, React.js, Node.js). It allows users to browse products, manage carts, and place orders, while also providing admin functionalities for managing products and users.
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## 🌐 Live Demo
+🔗 Frontend (Vercel): https://gharcart-frontend.vercel.app/
+🔗 Backend (Railway): gharcart-backend-production.up.railway.app
 
-Currently, two official plugins are available:
+## 🚀 Features
+👤 User Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+User Registration & Login (JWT Authentication)
 
-## Expanding the ESLint configuration
+Browse and filter products
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
->>>>>>> 9debdd9 (frontend upload)
+Add to Cart
+
+Place Orders
+
+View Order History
+
+🛠️ Admin Features
+
+Add / Edit / Delete Products
+
+Manage Users
+
+Manage Orders
+
+ ## 🧰 Tech Stack
+Frontend
+
+React.js
+
+CSS Tailwind
+
+Axios
+
+Backend
+
+Node.js
+
+Express.js
+
+Database
+
+MongoDB (MongoDB Atlas)
+
+Authentication
+
+JSON Web Tokens (JWT)
+
+## 📚 What I Learned
+
+Building full-stack applications using MERN
+
+REST API development
+
+Authentication using JWT
+
+State management in React
+
+Deployment on Vercel & Railway
+
+Handling CORS and environment variables
+
+## 🤝 Contributing
+
+Contributions are welcome! Feel free to fork the repository and submit a pull request.
+
+👩‍💻 Author
+
+Vanshika Mudgal
